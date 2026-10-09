@@ -23,16 +23,25 @@ This file is the **single source of truth** for every AI assistant that works wi
 ## 3. Repository map
 
 ```
-AGENTS.md            ← you are here: rules for every agent
-CLAUDE.md            ← Claude-specific pointer to this file
-DESIGN.md            ← brand and visual rules (read before producing anything visual)
-VERSION_CONTROL.md   ← branching and commit conventions
-README.md            ← human introduction
-context/             ← company and IT context (org, initiatives, principles)
-design-system/       ← tokens.css and brand assets
-.claude/skills/      ← skills (one folder per skill, each with a SKILL.md)
-tools/               ← small web tools and demo pages, one folder each
+AGENTS.md                        ← you are here: rules for every agent (tool-agnostic)
+CLAUDE.md                        ← Claude-specific additions; imports this file
+.github/copilot-instructions.md  ← Copilot-specific additions; points to this file
+CONNECTORS.md                    ← approved connections to mail, calendar, meetings, documents
+DESIGN.md                        ← brand and visual rules (read before producing anything visual)
+VERSION_CONTROL.md               ← branching and commit conventions
+README.md                        ← human introduction
+context/                         ← company-wide context (org, principles, glossary)
+departments/<DEPT>/              ← department workspaces; each adds its own AGENTS.md
+design-system/                   ← tokens.css and brand assets
+.claude/skills/                  ← shared skills, read by both Claude and Copilot
+tools/                           ← small web tools and demo pages, one folder each
 ```
+
+### How the layers work
+
+1. **One source of truth.** All shared rules live in this `AGENTS.md`. The tool files `CLAUDE.md` and `.github/copilot-instructions.md` only add what is specific to that tool, and they never repeat or contradict this file.
+2. **Departments add, never override.** A department folder such as `departments/IT/` has its own `AGENTS.md` with department context. When you work inside that folder, follow **both** files. If they conflict, this top-level file wins on security, data and brand. The department file wins on department-specific process.
+3. **One skills folder.** Skills live in `.claude/skills/` (company-wide) or `departments/<DEPT>/.claude/skills/` (department only). Both Claude and GitHub Copilot read this location, so a skill is written once.
 
 ## 4. Working rules for agents
 
@@ -43,6 +52,7 @@ tools/               ← small web tools and demo pages, one folder each
 5. **Separate facts from assumptions.** Label assumptions explicitly. Never present invented figures as Moba data. Mark example data as an example.
 6. **Make small, reviewable changes.** Follow `VERSION_CONTROL.md`: one feature branch per change, clear commit messages, and a pull request for review.
 7. **Leave no secrets.** Never commit passwords, API keys, tokens, connection strings or personal data. If you find one, stop and tell the user.
+8. **Help users connect their tools.** At the start of a session, check which approved connections in `CONNECTORS.md` are available to you. If mail, calendar or meeting notes are missing and the task would benefit from them, follow the `connect-your-tools` skill. Never ask the user for a password or code.
 
 ## 5. Security & data classification
 
@@ -52,6 +62,7 @@ tools/               ← small web tools and demo pages, one folder each
 | Internal | Org structure, initiative list, architecture principles | Yes (repository is private) |
 | Confidential | Security assessments, contracts, pricing, budgets | **No.** Reference the SharePoint location instead. |
 | Personal data (AVG/GDPR) | Employee feedback, HR files, customer contacts | **Never** |
+| Mail & meeting content | Email bodies, meeting transcripts, calendar details | **Never.** Read them through a connector, use them in the session and write back only the result (e.g. an action list without quotes or personal details). |
 
 Moba had a security incident in 2026. Treat security hygiene as a first-class requirement, not an afterthought.
 
