@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IT Initiatives Overview</title>
+<meta name="description" content="One-page overview of Moba's IT & Digital Transformation initiatives, snapshot 9 October 2026. Statuses still to be verified.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500&family=Ubuntu:wght@400;500;700&display=swap">
+<style>
+/* Page job: business readers and IT leads see in one glance which IT initiatives run,
+   where they stand (first impressions, still to be verified) and what is decided next.
+   Content source: departments/IT/portfolio/initiatives.md (snapshot 9 Oct 2026).
+   Tokens copied from design-system/tokens.css because this is a single-file page; light-only per DESIGN.md §9. */
+:root {
+  color-scheme: light;
+  --moba-navy: #002659;
+  --moba-navy-deep: #112337;
+  --moba-navy-light: #014589;
+  --moba-slate: #41586B;
+  --moba-grey: #8698A2;
+  --moba-canvas: #F2F3F5;
+  --moba-surface: #FFFFFF;
+  --moba-border: #DEE2E6;
+  --moba-amber: #FCAF17;
+  --moba-bronze-1: #D7955E;
+  --moba-bronze-2: #A77449;
+  --moba-error: #C02B0A;
+
+  --gradient-navy: linear-gradient(90deg, #014589, #002659);
+  --gradient-steel: linear-gradient(125deg, #A4B4BC -10%, #EFF0F3 58%);
+  --gradient-bronze: linear-gradient(#D7955E, #A77449);
+
+  /* Text on the navy band: white and a muted white, both derived from the palette surface */
+  --on-navy: #FFFFFF;
+  --on-navy-muted: rgba(255, 255, 255, .72);
+  --dot: rgba(134, 152, 162, .45); /* --moba-grey at reduced strength for the hero grid */
+
+  --font-heading: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Ubuntu", "Segoe UI", system-ui, sans-serif;
+  --fs-h1: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
+  --fs-h2: clamp(1.56rem, 1.3rem + 1vw, 2.25rem);
+
+  --sp-1: 8px;  --sp-2: 12px; --sp-3: 16px; --sp-4: 24px; --sp-5: 32px;
+  --sp-6: 40px; --sp-7: 52px; --sp-8: 64px; --sp-9: 80px; --sp-10: 100px;
+
+  --radius-card: 10px;
+  --radius-pill: 50px;
+  --radius-hero: 75px 0 0 0;
+  --wrap: 1240px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  margin: 0;
+  background: var(--moba-canvas);
+  color: var(--moba-navy);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: max(16px, 4vw); }
+h1, h2 { font-family: var(--font-heading); font-weight: 500; margin: 0; text-wrap: balance; }
+h1 { font-size: var(--fs-h1); line-height: 1.2; }
+h2 { font-size: var(--fs-h2); line-height: 1.35; }
+h3 { font-size: 1rem; font-weight: 500; line-height: 1.3; margin: 0; }
+p { margin: 0; }
+a { color: inherit; }
+/* DESIGN.md §3: no monospace, so file paths use the body font */
+code { font-family: var(--font-body); font-weight: 500; font-size: .875em; background: var(--moba-canvas); padding: 1px 6px; border-radius: 4px; overflow-wrap: anywhere; }
+:focus-visible { outline: 3px solid var(--moba-navy); outline-offset: 3px; border-radius: 4px; }
+.lead { color: var(--moba-slate); font-size: 1rem; line-height: 1.7; max-width: 62ch; }
+.eyebrow { font-weight: 500; font-size: 1rem; color: var(--moba-navy); }
+/* Bronze highlight: gradient text with a solid colour fallback */
+.hl {
+  color: var(--moba-bronze-2);
+  background: var(--gradient-bronze);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Top bar */
+.topbar { background: var(--gradient-navy); color: var(--on-navy); font-size: .82rem; }
+.topbar nav { display: flex; overflow-x: auto; scrollbar-width: none; }
+.topbar a {
+  flex: 1 0 auto; text-align: center; text-decoration: none; padding: 11px 16px;
+  color: var(--on-navy-muted); border-right: 1px solid rgba(255,255,255,.15);
+}
+.topbar a:last-child { border-right: 0; }
+.topbar a:hover { color: var(--on-navy); }
+
+/* Header with text wordmark (no logo file available offline; DESIGN.md §6: do not recolour the logo) */
+.header { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding-block: var(--sp-4); }
+.logo { text-decoration: none; display: grid; line-height: 1; }
+.logo b { font-weight: 700; font-size: 1.8rem; letter-spacing: .02em; border-bottom: 3px solid var(--moba-navy); padding-bottom: 2px; }
+.logo span { font-size: .72rem; color: var(--moba-slate); margin-top: 5px; }
+.dept { font-size: .85rem; color: var(--moba-slate); text-align: right; }
+
+/* Buttons: pills with a small navy arrow circle; navy text on amber for contrast */
+.btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  font: 400 1rem/1 var(--font-body); text-decoration: none; cursor: pointer;
+  padding: 12px 12px 12px 20px; border-radius: var(--radius-pill);
+  border: 1px solid transparent; transition: transform .15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--moba-amber); color: var(--moba-navy); }
+.btn-secondary { background: transparent; color: var(--moba-navy); border-color: var(--moba-navy); }
+.btn .arrow { width: 22px; height: 22px; border-radius: 50%; background: var(--moba-navy); display: grid; place-items: center; flex: none; }
+.btn .arrow svg { width: 10px; height: 10px; fill: none; stroke: var(--moba-surface); stroke-width: 2.4; }
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--sp-3); justify-content: center; }
+
+/* Hero: grey canvas, faint dotted grid, centred serif H1 */
+.hero { position: relative; padding-block: var(--sp-7) var(--sp-9); text-align: center; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 48%;
+  background-image: radial-gradient(var(--dot) 2.2px, transparent 2.4px);
+  background-size: 36px 36px;
+  -webkit-mask-image: linear-gradient(90deg, #000 30%, transparent);
+          mask-image: linear-gradient(90deg, #000 30%, transparent);
+  pointer-events: none;
+}
+.hero .wrap { position: relative; display: grid; gap: var(--sp-4); justify-items: center; }
+.hero .lead { margin-inline: auto; font-size: 1.05rem; }
+.verify {
+  display: inline-flex; align-items: center; gap: 10px; text-align: left;
+  background: var(--moba-surface); border: 1px solid var(--moba-border); border-radius: var(--radius-pill);
+  padding: 8px 16px; font-size: .85rem; color: var(--moba-slate); max-width: 100%;
+}
+.verify svg { flex: none; width: 14px; height: 18px; }
+
+/* Sections */
+section.block { padding-block: var(--sp-9); }
+section.block.alt { background: var(--moba-surface); }
+.block-head { display: grid; gap: var(--sp-2); margin-bottom: var(--sp-5); }
+
+/* Status markers: palette only, and the text label always carries the meaning */
+.mark { width: 12px; height: 12px; border-radius: 50%; flex: none; display: inline-block; }
+.mark[data-s="on-track"]       { background: var(--moba-navy); }
+.mark[data-s="at-risk"]        { background: var(--moba-bronze-1); }
+.mark[data-s="off-track"]      { background: var(--moba-bronze-2); box-shadow: inset 0 0 0 3px var(--moba-navy-deep); }
+.mark[data-s="not-started"]    { background: transparent; border: 2px solid var(--moba-grey); }
+.mark[data-s="decision"]       { background: var(--moba-surface); border: 3px double var(--moba-navy); }
+
+/* Status summary and filter */
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: var(--sp-2); margin-bottom: var(--sp-5); }
+.filter {
+  display: grid; gap: 6px; text-align: left; cursor: pointer;
+  background: var(--moba-surface); border: 1px solid var(--moba-border); border-radius: var(--radius-card);
+  padding: var(--sp-3); font: inherit; color: var(--moba-navy);
+}
+.filter:hover { border-color: var(--moba-navy); }
+.filter[aria-pressed="true"] { border-color: var(--moba-navy); box-shadow: inset 0 0 0 1px var(--moba-navy); }
+.filter[disabled] { cursor: default; opacity: .6; }
+.filter[disabled]:hover { border-color: var(--moba-border); }
+.filter .row { display: flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 500; }
+.filter .num { font-family: var(--font-heading); font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.filter-note { font-size: .85rem; color: var(--moba-slate); margin-top: calc(-1 * var(--sp-3)); margin-bottom: var(--sp-4); min-height: 1.5em; }
+.linklike { font: inherit; color: var(--moba-navy); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
+
+/* Initiative cards: white, 10px radius, no shadow */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: var(--sp-4); }
+.card {
+  background: var(--moba-surface); border-radius: var(--radius-card); border: 1px solid var(--moba-border);
+  padding: var(--sp-4); display: grid; gap: var(--sp-3); align-content: start;
+}
+.alt .card { background: var(--moba-canvas); border-color: transparent; }
+.card[hidden] { display: none; }
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-2); }
+.idx { font-family: var(--font-heading); font-size: 1.4rem; line-height: 1; color: var(--moba-grey); font-variant-numeric: tabular-nums; }
+.card h3 { font-size: 1.1rem; }
+.card h3 small { display: block; font-weight: 400; font-size: .85rem; color: var(--moba-slate); margin-top: 4px; }
+.card .goal { color: var(--moba-slate); font-size: .95rem; line-height: 1.6; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+  background: var(--moba-surface); border: 1px solid var(--moba-border); border-radius: var(--radius-pill);
+  padding: 5px 12px; font-size: .82rem; font-weight: 500;
+}
+.alt .chip { background: var(--moba-surface); }
+.chip .tbv { font-weight: 400; color: var(--moba-slate); }
+.meta { display: grid; gap: 10px; margin: 0; padding-top: var(--sp-3); border-top: 1px solid var(--moba-border); font-size: .88rem; }
+.meta div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: var(--sp-2); }
+.meta dt { color: var(--moba-slate); }
+.meta dd { margin: 0; }
+
+/* Navy band: milestones */
+.band { background: var(--gradient-navy); color: var(--on-navy); padding-block: var(--sp-9); }
+.band .eyebrow, .band h2 { color: var(--on-navy); }
+.band .lead { color: var(--on-navy-muted); }
+.months { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: var(--sp-5); list-style: none; margin: 0; padding: 0; }
+.month h3 { font-family: var(--font-heading); font-weight: 500; font-size: 1.4rem; padding-bottom: var(--sp-2); border-bottom: 1px solid rgba(255,255,255,.25); margin-bottom: var(--sp-3); }
+.month ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
+.month li { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 12px; font-size: .95rem; line-height: 1.5; }
+.month li svg { width: 14px; height: 18px; margin-top: 3px; }
+.month li span small { display: block; color: var(--on-navy-muted); font-size: .82rem; }
+.open { margin-top: var(--sp-6); padding-top: var(--sp-4); border-top: 1px solid rgba(255,255,255,.25); font-size: .92rem; color: var(--on-navy-muted); line-height: 1.6; }
+.open b { color: var(--on-navy); font-weight: 500; }
+
+/* About this snapshot */
+.about { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: var(--sp-4); }
+.egg-list { list-style: none; padding: 0; margin: 0; display: grid; }
+.egg-list li { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--moba-border); font-size: .95rem; color: var(--moba-slate); line-height: 1.6; }
+.egg-list li:last-child { border-bottom: 0; }
+.egg-list li b { color: var(--moba-navy); font-weight: 500; }
+.egg-list svg { width: 14px; height: 18px; margin-top: 4px; }
+
+/* Footer: steel gradient */
+footer { background: var(--gradient-steel); padding-block: var(--sp-7); font-size: .85rem; color: var(--moba-slate); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-3); }
+footer b { color: var(--moba-navy); font-weight: 500; }
+
+@media (max-width: 676px) {
+  section.block, .band { padding-block: var(--sp-8); }
+  .hero { padding-block: var(--sp-5) var(--sp-8); }
+  .dept { display: none; }
+  .verify { border-radius: var(--radius-card); }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="egg" viewBox="0 0 16 20"><path d="M8 1C4.5 1 1.5 7 1.5 12a6.5 6.5 0 0 0 13 0C14.5 7 11.5 1 8 1Z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="arrow" viewBox="0 0 10 10"><path d="M2 5h6M5.5 2.5 8 5 5.5 7.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="topbar">
+  <nav class="wrap" aria-label="Sections">
+    <a href="#status">Status</a>
+    <a href="#initiatives">Initiatives</a>
+    <a href="#milestones">Milestones</a>
+    <a href="#about">About this snapshot</a>
+  </nav>
+</div>
+
+<header class="wrap header">
+  <a class="logo" href="#top" aria-label="Moba, Egg Industry Solutions"><b>MOBA</b><span>Egg Industry Solutions</span></a>
+  <p class="dept">IT &amp; Digital Transformation<br>Internal</p>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">IT &amp; Digital Transformation</p>
+      <h1>Our <span class="hl">Digital</span> Roadmap</h1>
+      <p class="lead">Nine initiatives that change how Moba works: from a new ERP and security foundations to AI that helps every team. One page with what each one aims for, who leads it and what comes next.</p>
+      <p class="verify"><svg aria-hidden="true" style="color:var(--moba-navy)"><use href="#egg"/></svg><span>Snapshot 9 October 2026. <b>Statuses are first impressions and still to be verified</b> with the initiative owners.</span></p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#initiatives">See the initiatives <span class="arrow"><svg><use href="#arrow"/></svg></span></a>
+        <a class="btn btn-secondary" href="#milestones">View next milestones <span class="arrow"><svg><use href="#arrow"/></svg></span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt" id="status" aria-labelledby="status-h">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Portfolio at a glance</p>
+        <h2 id="status-h">Where the initiatives stand</h2>
+        <p class="lead">Status scale used by IT &amp; Digital Transformation. Select a status to show only those initiatives. All values are still to be verified.</p>
+      </div>
+
+      <div class="summary" role="group" aria-label="Filter initiatives by status">
+        <button class="filter" type="button" data-filter="on-track" aria-pressed="false"><span class="row"><span class="mark" data-s="on-track"></span>On track</span><span class="num">4</span></button>
+        <button class="filter" type="button" data-filter="at-risk" aria-pressed="false"><span class="row"><span class="mark" data-s="at-risk"></span>At risk</span><span class="num">1</span></button>
+        <button class="filter" type="button" data-filter="off-track" aria-pressed="false" disabled><span class="row"><span class="mark" data-s="off-track"></span>Off track</span><span class="num">0</span></button>
+        <button class="filter" type="button" data-filter="not-started" aria-pressed="false"><span class="row"><span class="mark" data-s="not-started"></span>Not started</span><span class="num">2</span></button>
+        <button class="filter" type="button" data-filter="decision" aria-pressed="false"><span class="row"><span class="mark" data-s="decision"></span>Decision needed</span><span class="num">2</span></button>
+      </div>
+      <p class="filter-note" id="filter-note" aria-live="polite">Showing all 9 initiatives.</p>
+
+      <div class="cards" id="initiatives" style="scroll-margin-top: 24px">
+        <article class="card" data-status="at-risk">
+          <div class="card-top"><span class="idx">01</span><span class="chip"><span class="mark" data-s="at-risk"></span>At risk <span class="tbv">· to verify</span></span></div>
+          <h3>ERP replacement<small>Infor LN to, most likely, Microsoft Dynamics</small></h3>
+          <p class="goal">One modern ERP that supports Moba's global growth. Business-led programme.</p>
+          <dl class="meta">
+            <div><dt>Lead</dt><dd>Business architect (TQM), with IT</dd></div>
+            <div><dt>Next milestone</dt><dd>Vendor decision, November 2026</dd></div>
+          </dl>
+        </article>
+
+        <article class="card" data-status="decision">
+          <div class="card-top"><span class="idx">02</span><span class="chip"><span class="mark" data-s="decision"></span>Decision needed <span class="tbv">· to verify</span></span></div>
+          <h3>Security foundations</h3>
+          <p class="goal">Appoint a CISO and adopt a security framework and policy. Moba has no formal framework yet.</p>
+          <dl class="meta">
+            <div><dt>Lead</dt><dd>Director IT &amp; Digital Transformation</dd></div>
+            <div><dt>Next milestone</dt><dd>External assessment review, October 2026</dd></div>
+          </dl>
+        </article>
+
+        <article class="card" data-status="decision">
+          <div class="card-top"><span class="idx">03</span><span class="chip"><span class="mark" data-s="decision"></span>Decision needed <span class="tbv">· to verify</span></span></div>
+          <h3>Storage &amp; cloud direction</h3>
+          <p class="goal">Decide between investing in on-premise storage and moving to Azure, Moba's cloud platform.</p>
+          <dl class="meta">
+            <div><dt>Lead</dt><dd>Infrastructure lead</dd></div>
+            <div><dt>Next milestone</dt><dd>Investment decision, October 2026</dd></div>
+          </dl>
+        </article>
+
+        <article class="card" data-status="on-track">
+          <div class="card-top"><span class="idx">04</span><span class="chip"><span class="mark" data-s="on-track"></span>On track <span class="tbv">· to verify</span></span></div>
+          <h3>MyMoba customer portal</h3>
+          <p class="goal">Give customers visibility into their orders and into the factory.</p>
+          <dl class="meta">
+            <div><dt>Lead</dt><dd>Application management</dd></div>
+            <div><dt>Next milestone</dt><dd>Scope of the next module</dd></div>
+          </dl>
+        </article>
+
+        <article class="card" data-status="on-track">
+          <div class="card-top"><span class="idx">05</span><span class="chip"><span class="mark" data-s="on-track"></span>On track <span class="tbv">· to verify</span></span></div>
+          <h3>AI enablement</h3>
+          <p class="goal">Move from ad-hoc to structured AI use: Copilot rollout, Claude for engineers and a shared company repository.</p>
+          <dl class="meta">
+            <div><dt>Lead</dt><dd>Director IT &amp; Digital Transformation</dd></div>
+            <div><dt>Next milestone</dt><dd>Copilot Premium rollout, October 2026</dd></div>
+          </dl>
+        </article>
+
+        <article class="card" data-status="on-track">
+          <div class="card-top"><span class="idx">06</span><span class="chip"><span class="mark" data-s="on-track"></span>On track <span class="tbv">· to verify</span></span></div>
+          <h3>Telephony replacement</h3>
+          <p class="goal">Replace the end-of-life telephone exchange (PBX). Teams telephony is weighed against alternatives.</p>
+          <dl class="meta">
+            <div><dt>Lead</dt><dd>Infrastructure lead</dd></div>
+            <div><dt>Next milestone</dt><dd>Vendor presentations, late October 2026</dd></div>
+          </dl>
+        </article>
+
+        <article class="card" data-status="not-started">
+          <div class="card-top"><span class="idx">07</span><span class="chip"><span class="mark" data-s="not-started"></span>Not started <span class="tbv">· to verify</span></span></div>
+          <h3>Data fabric / digital twin</h3>
+          <p class="goal">A data platform that runs alongside the ERP programme.</p>
+          <dl class="meta">
+            <div><dt>Lead</dt><dd>Data team (external lead)</dd></div>
+            <div><dt>Next milestone</dt><dd>Align scope with the ERP choice</dd></div>
+          </dl>
+        </article>
+
+        <article class="card" data-status="on-track">
+          <div class="card-top"><span class="idx">08</span><span class="chip"><span class="mark" data-s="on-track"></span>On track <span class="tbv">· to verify</span></span></div>
+          <h3>Architecture board</h3>
+          <p class="goal">Govern architecture decisions across IT and R&amp;D. Started in 2026.</p>
+          <dl class="meta">
+            <div><dt>Lead</dt><dd>Interim chair (business architect)</dd></div>
+            <div><dt>Next milestone</dt><dd>Chair handover review, December 2026</dd></div>
+          </dl>
+        </article>
+
+        <article class="card" data-status="not-started">
+          <div class="card-top"><span class="idx">09</span><span class="chip"><span class="mark" data-s="not-started"></span>Not started <span class="tbv">· to verify</span></span></div>
+          <h3>IT continuity plan</h3>
+          <p class="goal">A plan for IT outages and recovery, going beyond the general calamity plan.</p>
+          <dl class="meta">
+            <div><dt>Lead</dt><dd>Infrastructure and service desk</dd></div>
+            <div><dt>Next milestone</dt><dd>Agree owner and scope</dd></div>
+          </dl>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="milestones" aria-labelledby="ms-h">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">What comes next</p>
+        <h2 id="ms-h">Milestones for Q4 2026</h2>
+        <p class="lead">Three decisions fall in October: security, storage and cloud, and the ERP vendor in November. These shape most of the other initiatives.</p>
+      </div>
+      <ol class="months">
+        <li class="month">
+          <h3>October</h3>
+          <ul>
+            <li><svg aria-hidden="true"><use href="#egg"/></svg><span>External security assessment review<small>Security foundations · decision needed</small></span></li>
+            <li><svg aria-hidden="true"><use href="#egg"/></svg><span>On-premise or Azure investment decision<small>Storage &amp; cloud direction · decision needed</small></span></li>
+            <li><svg aria-hidden="true"><use href="#egg"/></svg><span>Copilot Premium rollout<small>AI enablement</small></span></li>
+            <li><svg aria-hidden="true"><use href="#egg"/></svg><span>Telephony vendor presentations (late October)<small>Telephony replacement</small></span></li>
+          </ul>
+        </li>
+        <li class="month">
+          <h3>November</h3>
+          <ul>
+            <li><svg aria-hidden="true"><use href="#egg"/></svg><span>ERP vendor decision<small>ERP replacement · at risk</small></span></li>
+          </ul>
+        </li>
+        <li class="month">
+          <h3>December</h3>
+          <ul>
+            <li><svg aria-hidden="true"><use href="#egg"/></svg><span>Architecture board chair handover review<small>Architecture board</small></span></li>
+          </ul>
+        </li>
+      </ol>
+      <p class="open"><b>No date yet:</b> MyMoba next module scope · data fabric scope, which follows the ERP choice · owner and scope for the IT continuity plan.</p>
+    </div>
+  </section>
+
+  <section class="block" id="about" aria-labelledby="about-h">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">About this snapshot</p>
+        <h2 id="about-h">How to read this page</h2>
+      </div>
+      <div class="about">
+        <ul class="egg-list">
+          <li><svg aria-hidden="true" style="color:var(--moba-navy)"><use href="#egg"/></svg><span><b>Source.</b> The IT portfolio list (<code>departments/IT/portfolio/initiatives.md</code>), based on the intro briefing with the interim CIO on 9 October 2026.</span></li>
+          <li><svg aria-hidden="true" style="color:var(--moba-navy)"><use href="#egg"/></svg><span><b>Status is not yet verified.</b> Each status is a first impression. It will be checked with the initiative owners in the first weeks and then updated monthly.</span></li>
+        </ul>
+        <ul class="egg-list">
+          <li><svg aria-hidden="true" style="color:var(--moba-navy)"><use href="#egg"/></svg><span><b>Leads are roles, not names,</b> until the first round of conversations is complete.</span></li>
+          <li><svg aria-hidden="true" style="color:var(--moba-navy)"><use href="#egg"/></svg><span><b>No budgets on this page.</b> Budgets and contract values are confidential and stay in SharePoint.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><b>Moba</b> · IT &amp; Digital Transformation · Internal</span>
+    <span>Snapshot 9 October 2026 · statuses to be verified</span>
+  </div>
+</footer>
+
+<script>
+// Status filter: one active status at a time; selecting it again shows all initiatives.
+(function () {
+  const buttons = document.querySelectorAll('.filter');
+  const cards = document.querySelectorAll('.card');
+  const note = document.getElementById('filter-note');
+  const allNote = 'Showing all ' + cards.length + ' initiatives.';
+
+  function apply(status) {
+    let shown = 0;
+    cards.forEach(card => {
+      const match = !status || card.dataset.status === status;
+      card.hidden = !match;
+      if (match) shown++;
+    });
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.filter === status)));
+    if (!status) { note.textContent = allNote; return; }
+    const label = document.querySelector('.filter[data-filter="' + status + '"] .row').textContent.trim();
+    note.innerHTML = '';
+    note.append('Showing ' + shown + ' of ' + cards.length + ' initiatives: ' + label + '. ');
+    const reset = document.createElement('button');
+    reset.type = 'button'; reset.className = 'linklike'; reset.textContent = 'Show all';
+    reset.addEventListener('click', () => apply(null));
+    note.append(reset);
+  }
+
+  buttons.forEach(b => b.addEventListener('click', () => {
+    apply(b.getAttribute('aria-pressed') === 'true' ? null : b.dataset.filter);
+  }));
+})();
+</script>
+</body>
+</html>

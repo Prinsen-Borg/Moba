@@ -14,6 +14,8 @@ The shared "brain" for AI assistants at Moba. When you clone this repository and
 | [`VERSION_CONTROL.md`](VERSION_CONTROL.md) | How we branch, commit and review |
 | [`.claude/skills/`](.claude/skills) | Reusable procedures, such as building a web page |
 | [`tools/design-showcase/`](tools/design-showcase/index.html) | Living demo of the design system |
+| [`tools/task-list/`](tools/task-list/README.md) | Personal task list that Claude fills from meeting notes |
+| [`tools/it-portfolio/`](tools/it-portfolio/index.html) | One-page overview of IT initiatives (test of the repo setup) |
 
 ## Try it
 
