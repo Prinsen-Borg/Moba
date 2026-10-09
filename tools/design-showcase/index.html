@@ -1,0 +1,514 @@
+<title>Moba Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500&family=Ubuntu:wght@400;500;700&display=swap">
+<style>
+/* Layout: moba.net section rhythm (eyebrow → serif H2 → lead → content) on a grey canvas; light-only per DESIGN.md §9 */
+:root {
+  color-scheme: light;
+  --moba-navy: #002659;
+  --moba-navy-deep: #112337;
+  --moba-navy-light: #014589;
+  --moba-slate: #41586B;
+  --moba-grey: #8698A2;
+  --moba-canvas: #F2F3F5;
+  --moba-surface: #FFFFFF;
+  --moba-border: #DEE2E6;
+  --moba-amber: #FCAF17;
+  --moba-bronze-1: #D7955E;
+  --moba-bronze-2: #A77449;
+  --moba-error: #C02B0A;
+  --on-navy: #FFFFFF;
+  --on-navy-muted: #C9D3DE;
+  --dot: #C3CDD4;
+
+  --gradient-navy: linear-gradient(90deg, var(--moba-navy-light), var(--moba-navy));
+  --gradient-steel: linear-gradient(125deg, #A4B4BC -10%, #EFF0F3 58%);
+  --gradient-bronze: linear-gradient(var(--moba-bronze-1), var(--moba-bronze-2));
+
+  --font-heading: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Ubuntu", "Segoe UI", system-ui, sans-serif;
+  --fs-h1: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
+  --fs-h2: clamp(1.56rem, 1.3rem + 1vw, 2.25rem);
+
+  --sp-1: 8px; --sp-2: 12px; --sp-3: 16px; --sp-4: 24px; --sp-5: 32px;
+  --sp-6: 40px; --sp-7: 52px; --sp-8: 64px; --sp-9: 80px; --sp-10: 100px;
+
+  --radius-card: 10px;
+  --radius-pill: 50px;
+  --radius-hero: 75px 0 0 0;
+  --wrap: 1180px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  margin: 0;
+  background: var(--moba-canvas);
+  color: var(--moba-navy);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: max(16px, 4vw); }
+h1, h2 { font-family: var(--font-heading); font-weight: 500; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--fs-h1); line-height: 1.2; }
+h2 { font-size: var(--fs-h2); line-height: 1.35; }
+h3 { font-size: 1rem; font-weight: 500; margin: 0; line-height: 1.3; }
+p { margin: 0; }
+.lead { color: var(--moba-slate); font-size: 1rem; line-height: 1.7; max-width: 62ch; }
+.eyebrow { font-weight: 500; font-size: 1rem; color: var(--moba-navy); }
+.hl {
+  color: var(--moba-bronze-1);
+  background: var(--gradient-bronze);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--moba-navy); outline-offset: 3px; border-radius: 4px; }
+code { font-family: var(--font-body); font-weight: 500; font-size: .875em; background: var(--moba-canvas); padding: 1px 6px; border-radius: 4px; }
+
+/* Top bar */
+.topbar { background: var(--gradient-navy); color: var(--on-navy); font-size: .8rem; }
+.topbar nav { display: flex; overflow-x: auto; }
+.topbar a {
+  flex: 1 0 auto; text-align: center; text-decoration: none; padding: 12px 18px;
+  border-right: 1px solid rgba(255,255,255,.15); color: var(--on-navy-muted);
+}
+.topbar a:last-child { border-right: 0; }
+.topbar a:hover { color: var(--on-navy); }
+
+/* Header */
+.header { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding-block: var(--sp-4); }
+.logo { text-decoration: none; display: grid; line-height: 1; }
+.logo b { font-family: var(--font-body); font-weight: 700; font-size: 1.9rem; letter-spacing: .02em; border-bottom: 3px solid var(--moba-navy); padding-bottom: 2px; }
+.logo span { font-size: .72rem; color: var(--moba-slate); margin-top: 5px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  font: 400 1rem/1 var(--font-body); text-decoration: none; cursor: pointer;
+  padding: 12px 12px 12px 20px; border-radius: var(--radius-pill);
+  border: 1px solid transparent; transition: transform .15s ease, background-color .15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--moba-amber); color: var(--moba-navy); }
+.btn-secondary { background: transparent; color: var(--moba-navy); border-color: var(--moba-navy); }
+.btn .arrow { width: 22px; height: 22px; border-radius: 50%; background: var(--moba-navy); display: grid; place-items: center; flex: none; }
+.btn .arrow svg { width: 10px; height: 10px; fill: none; stroke: var(--moba-surface); stroke-width: 2.4; }
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+
+/* Hero */
+.hero { position: relative; padding-block: var(--sp-8) var(--sp-9); text-align: center; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 46%;
+  background-image: radial-gradient(var(--dot) 2.2px, transparent 2.4px);
+  background-size: 36px 36px; opacity: .8;
+  -webkit-mask-image: linear-gradient(90deg, #000 30%, transparent);
+          mask-image: linear-gradient(90deg, #000 30%, transparent);
+  pointer-events: none;
+}
+.hero .wrap { position: relative; display: grid; gap: var(--sp-4); justify-items: center; }
+.hero .lead { font-size: 1.05rem; margin-inline: auto; }
+.hero .btn-row { justify-content: center; margin-top: var(--sp-2); }
+.version { font-size: .8rem; color: var(--moba-slate); }
+
+/* Sections */
+section.block { padding-block: var(--sp-9); }
+section.block.alt { background: var(--moba-surface); }
+.block-head { display: grid; gap: var(--sp-2); margin-bottom: var(--sp-6); }
+
+/* Swatches */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp-4); }
+.swatch { background: var(--moba-surface); border-radius: var(--radius-card); overflow: hidden; display: grid; grid-template-rows: 110px auto; border: 1px solid var(--moba-border); }
+.alt .swatch { border-color: var(--moba-border); }
+.chip { position: relative; }
+.chip.lined { border-bottom: 1px solid var(--moba-border); }
+.swatch-body { padding: var(--sp-3); display: grid; gap: 4px; }
+.swatch-body .name { font-weight: 500; }
+.swatch-body .use { font-size: .85rem; color: var(--moba-slate); line-height: 1.45; }
+.hex { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: .9rem; font-variant-numeric: tabular-nums; }
+.hex code { background: none; padding: 0; color: var(--moba-slate); font-weight: 400; }
+.copy {
+  font: 500 .75rem var(--font-body); color: var(--moba-navy); background: var(--moba-canvas);
+  border: 1px solid var(--moba-border); border-radius: var(--radius-pill); padding: 4px 10px; cursor: pointer;
+}
+.copy:hover { border-color: var(--moba-navy); }
+
+.gradients { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-4); margin-top: var(--sp-6); }
+.grad { border-radius: var(--radius-card); min-height: 130px; padding: var(--sp-4); display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
+.grad small { font-size: .82rem; }
+.grad.navy { background: var(--gradient-navy); color: var(--on-navy); }
+.grad.navy small { color: var(--on-navy-muted); }
+.grad.steel { background: var(--gradient-steel); color: var(--moba-navy); }
+.grad.steel small { color: var(--moba-slate); }
+.grad.bronze { background: var(--moba-surface); border: 1px solid var(--moba-border); }
+.grad.bronze .big { font-family: var(--font-heading); font-size: 2.2rem; line-height: 1.1; }
+.grad.bronze small { color: var(--moba-slate); }
+
+/* Typography */
+.type-list { display: grid; gap: 0; background: var(--moba-surface); border-radius: var(--radius-card); border: 1px solid var(--moba-border); }
+.type-row { display: grid; grid-template-columns: 190px 1fr; gap: var(--sp-4); padding: var(--sp-4); border-bottom: 1px solid var(--moba-border); align-items: baseline; }
+.type-row:last-child { border-bottom: 0; }
+.type-row > * { min-width: 0; }
+.type-meta { font-size: .82rem; color: var(--moba-slate); display: grid; gap: 2px; font-variant-numeric: tabular-nums; }
+.type-meta b { color: var(--moba-navy); font-weight: 500; font-size: .9rem; }
+.spec-body { color: var(--moba-slate); font-size: 1rem; line-height: 1.7; max-width: 62ch; }
+
+/* Spacing */
+.spacing { display: grid; gap: 10px; }
+.sp-row { display: grid; grid-template-columns: 110px minmax(0, 1fr); align-items: center; gap: var(--sp-3); font-size: .85rem; font-variant-numeric: tabular-nums; }
+.sp-row span { color: var(--moba-slate); }
+.sp-row > * { min-width: 0; }
+.sp-bar { height: 14px; background: var(--moba-navy); border-radius: 3px; max-width: 100%; }
+.sp-row:nth-child(odd) .sp-bar { background: var(--moba-navy-light); }
+
+/* Components */
+.comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--sp-5); }
+.panel { background: var(--moba-surface); border-radius: var(--radius-card); border: 1px solid var(--moba-border); padding: var(--sp-5); display: grid; gap: var(--sp-4); align-content: start; }
+.panel .label { font-size: .8rem; color: var(--moba-slate); letter-spacing: .04em; text-transform: uppercase; font-weight: 500; }
+.egg-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0; }
+.egg-list li { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: 14px 0; border-bottom: 1px solid var(--moba-border); font-size: 1rem; }
+.egg-list li:last-child { border-bottom: 0; }
+.egg-list svg { width: 16px; height: 20px; flex: none; }
+
+.products { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--sp-4); margin-top: var(--sp-6); }
+.product { background: var(--moba-surface); border-radius: var(--radius-card); text-align: center; padding: var(--sp-4); display: grid; gap: var(--sp-2); justify-items: center; align-content: start; }
+.product .render { width: 100%; aspect-ratio: 4 / 3; max-width: 100%; display: grid; place-items: center; background: var(--moba-canvas); border-radius: 8px; }
+.product .render svg { width: 56%; height: auto; }
+.product p { font-size: .9rem; color: var(--moba-slate); line-height: 1.6; }
+.product .spec { font-size: .8rem; color: var(--moba-navy); font-weight: 500; font-variant-numeric: tabular-nums; }
+.product a { font-size: .9rem; font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--moba-amber); padding-bottom: 1px; }
+
+/* Imagery */
+.imagery { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--sp-8); align-items: center; }
+.imagery > * { min-width: 0; }
+.photo-frame { position: relative; padding: 0 28px 28px 0; }
+.photo-frame::after { content: ""; position: absolute; right: 0; bottom: 0; width: 34%; height: 62%; background: var(--moba-amber); z-index: 0; }
+.photo {
+  position: relative; z-index: 1; border-radius: var(--radius-hero); aspect-ratio: 16 / 10; max-width: 100%; overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(0,38,89,0) 55%, rgba(0,38,89,.35)),
+    radial-gradient(120% 70% at 20% 100%, #5E7A4E 0 40%, transparent 41%),
+    radial-gradient(110% 60% at 85% 100%, #6E8A5B 0 45%, transparent 46%),
+    radial-gradient(140% 80% at 50% 110%, #4F6B43 0 55%, transparent 56%),
+    linear-gradient(180deg, #B9CCD8 0%, #DDE6EC 45%, #A9BBA0 46%, #7E9670 100%);
+}
+.photo .tag { position: absolute; left: var(--sp-4); bottom: var(--sp-3); color: var(--on-navy); font-size: .8rem; }
+.rules { display: grid; gap: var(--sp-3); }
+.rule { display: grid; grid-template-columns: 28px 1fr; gap: var(--sp-2); font-size: 1rem; color: var(--moba-slate); line-height: 1.55; }
+.rule b { color: var(--moba-navy); font-weight: 500; }
+.mark { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: .8rem; font-weight: 700; }
+.mark.do { background: var(--moba-navy); color: var(--on-navy); }
+.mark.dont { background: var(--moba-canvas); color: var(--moba-error); border: 1px solid var(--moba-error); }
+
+/* Do / Don't */
+.dodont { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--sp-5); }
+
+/* Navy band */
+.band { background: var(--gradient-navy); color: var(--on-navy); padding-block: var(--sp-9); }
+.band h2 { color: var(--on-navy); }
+.band .lead { color: var(--on-navy-muted); }
+.flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--sp-4); margin-top: var(--sp-6); counter-reset: step; }
+.flow li { list-style: none; border-top: 1px solid rgba(255,255,255,.25); padding-top: var(--sp-3); display: grid; gap: 6px; }
+.flow li::before { counter-increment: step; content: "Step " counter(step); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--moba-amber); font-weight: 500; }
+.flow code { background: rgba(255,255,255,.12); color: var(--on-navy); }
+.flow p { color: var(--on-navy-muted); font-size: .95rem; line-height: 1.55; }
+.band ol { padding: 0; margin: 0; }
+
+/* Footer */
+footer { background: var(--gradient-steel); padding-block: var(--sp-8); }
+.foot { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: var(--sp-5); }
+.foot > * { min-width: 0; }
+.foot h3 { margin-bottom: var(--sp-2); }
+.foot ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: .9rem; color: var(--moba-slate); }
+.foot .tagline { font-family: var(--font-heading); font-size: 1.4rem; line-height: 1.3; margin-top: var(--sp-3); }
+.legal { margin-top: var(--sp-6); padding-top: var(--sp-3); border-top: 1px solid rgba(0,38,89,.15); font-size: .8rem; color: var(--moba-slate); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-2); }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  background: var(--moba-navy); color: var(--on-navy); padding: 10px 18px; border-radius: var(--radius-pill); font-size: .9rem;
+}
+
+@media (max-width: 860px) {
+  .imagery { grid-template-columns: 1fr; gap: var(--sp-6); }
+  .foot { grid-template-columns: 1fr 1fr; }
+  .type-row { grid-template-columns: 1fr; gap: var(--sp-2); }
+}
+@media (max-width: 520px) {
+  .header .btn-primary { display: none; }
+  .foot { grid-template-columns: 1fr; }
+  section.block, .band { padding-block: var(--sp-8); }
+}
+</style>
+
+<div class="topbar">
+  <nav class="wrap" aria-label="Sections">
+    <a href="#colour">Colour</a>
+    <a href="#type">Typography</a>
+    <a href="#spacing">Spacing</a>
+    <a href="#components">Components</a>
+    <a href="#imagery">Imagery</a>
+    <a href="#agents">For AI agents</a>
+  </nav>
+</div>
+
+<header class="wrap header">
+  <a class="logo" href="#top" aria-label="Moba design system home">
+    <b>MOBA</b>
+    <span>Egg Industry Solutions</span>
+  </a>
+  <a class="btn btn-primary" href="https://github.com/Prinsen-Borg/Moba/blob/main/DESIGN.md">Open DESIGN.md
+    <span class="arrow" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M3 1.5 6.5 5 3 8.5"/></svg></span>
+  </a>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Moba Design System</p>
+      <h1>One <span class="hl">Recognisable</span> Moba, on Every Screen</h1>
+      <p class="lead">The colours, type and shapes of moba.net, written down so that every colleague and every AI assistant builds pages, tools and documents that look like Moba from the first glance.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#colour">Explore the palette
+          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M3 1.5 6.5 5 3 8.5"/></svg></span>
+        </a>
+        <a class="btn btn-secondary" href="#agents">How agents use it
+          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M3 1.5 6.5 5 3 8.5"/></svg></span>
+        </a>
+      </div>
+      <p class="version">v0.1 · extracted from moba.net on 9 October 2026 · not yet checked against the Marketing brand book</p>
+    </div>
+  </section>
+
+  <section class="block alt" id="colour">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Colour</p>
+        <h2>Navy for words, amber for action</h2>
+        <p class="lead">A calm grey canvas carries deep navy type. Amber is kept for the one thing you want people to click, and bronze lifts a single word in a headline.</p>
+      </div>
+      <div class="swatches" id="swatches"></div>
+      <div class="gradients">
+        <div class="grad navy"><b>Navy band</b><small>Section dividers, newsletter, top bar · #014589 → #002659</small></div>
+        <div class="grad steel"><b>Soft steel</b><small>Footer and quiet sections · #A4B4BC → #EFF0F3</small></div>
+        <div class="grad bronze"><span class="big hl">Sustainable</span><small>Bronze highlight · one word per headline · #D7955E → #A77449</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="type">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Typography</p>
+        <h2>A warm serif for headlines, a friendly sans for everything else</h2>
+        <p class="lead">IBM Plex Serif gives headlines an established, trustworthy voice. Ubuntu keeps the interface and body copy open and technical. On Windows laptops without these fonts, Georgia and Segoe UI take over.</p>
+      </div>
+      <div class="type-list">
+        <div class="type-row">
+          <div class="type-meta"><b>H1</b>IBM Plex Serif 500<br>36–56px · line-height 1.2</div>
+          <h1>Building Your <span class="hl">Sustainable</span> Egg Future</h1>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><b>H2</b>IBM Plex Serif 500<br>25–36px · line-height 1.35</div>
+          <h2>Your Challenges, Our Solutions</h2>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><b>Eyebrow</b>Ubuntu 500 · 16px<br>sentence case, above H2</div>
+          <p class="eyebrow">A Solution for Every Egg Challenge</p>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><b>H3 / card title</b>Ubuntu 500 · 16px</div>
+          <h3>Omnia PX grader</h3>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><b>Body</b>Ubuntu 400 · 16–18px<br>slate #41586B · line-height 1.7</div>
+          <p class="spec-body">With the Omnia PX series, Moba sets a new standard for three goals that matter to every egg producer: gentle handling, hygiene and output. Keep running text near 65 characters per line.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt" id="spacing">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Spacing</p>
+        <h2>Ten steps from 8 to 100 pixels</h2>
+        <p class="lead">Use only these values for gaps and padding. Sections breathe with 64–100px between them, and cards use 24–32px inside.</p>
+      </div>
+      <div class="spacing" id="spacingScale"></div>
+    </div>
+  </section>
+
+  <section class="block" id="components">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Components</p>
+        <h2>Pills, flat cards and the egg</h2>
+        <p class="lead">Buttons are pills with a small navy arrow. Cards are white, rounded and never shadowed. A small egg marks list items and links.</p>
+      </div>
+      <div class="comp-grid">
+        <div class="panel">
+          <p class="label">Buttons</p>
+          <div class="btn-row">
+            <button class="btn btn-primary" type="button">Get in touch
+              <span class="arrow" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M3 1.5 6.5 5 3 8.5"/></svg></span>
+            </button>
+            <button class="btn btn-secondary" type="button">About Moba
+              <span class="arrow" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M3 1.5 6.5 5 3 8.5"/></svg></span>
+            </button>
+          </div>
+          <p class="lead">One primary per screen. Button text stays navy, because white on amber fails contrast.</p>
+        </div>
+        <div class="panel">
+          <p class="label">Egg list</p>
+          <ul class="egg-list">
+            <li>Become independent of scarce labour <svg viewBox="0 0 16 20" aria-hidden="true"><path d="M8 1C4.5 1 1.5 7 1.5 12a6.5 6.5 0 0 0 13 0C14.5 7 11.5 1 8 1Z" fill="none" stroke="#002659" stroke-width="1.6"/></svg></li>
+            <li>Optimise the value per egg <svg viewBox="0 0 16 20" aria-hidden="true"><path d="M8 1C4.5 1 1.5 7 1.5 12a6.5 6.5 0 0 0 13 0C14.5 7 11.5 1 8 1Z" fill="none" stroke="#002659" stroke-width="1.6"/></svg></li>
+            <li>Ensure 100% contract fulfilment <svg viewBox="0 0 16 20" aria-hidden="true"><path d="M8 1C4.5 1 1.5 7 1.5 12a6.5 6.5 0 0 0 13 0C14.5 7 11.5 1 8 1Z" fill="none" stroke="#002659" stroke-width="1.6"/></svg></li>
+            <li>Increase food safety <svg viewBox="0 0 16 20" aria-hidden="true"><path d="M8 1C4.5 1 1.5 7 1.5 12a6.5 6.5 0 0 0 13 0C14.5 7 11.5 1 8 1Z" fill="none" stroke="#002659" stroke-width="1.6"/></svg></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="products" id="products"></div>
+    </div>
+  </section>
+
+  <section class="block alt" id="imagery">
+    <div class="wrap imagery">
+      <div class="photo-frame">
+        <div class="photo" role="img" aria-label="Placeholder landscape showing the signature rounded top-left corner">
+          <span class="tag">Placeholder · use real farm or factory photography</span>
+        </div>
+      </div>
+      <div class="block-head" style="margin:0">
+        <p class="eyebrow">Imagery</p>
+        <h2>One big rounded corner</h2>
+        <p class="lead">Hero images get a 75px radius on the top-left corner only. An amber block can sit partly behind the image as an accent. Use real photography of farms, factories and machines rather than stock illustrations.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="dd">
+    <div class="wrap">
+      <div class="block-head">
+        <p class="eyebrow">Rules of thumb</p>
+        <h2 id="dd">Do and don't</h2>
+      </div>
+      <div class="dodont">
+        <div class="panel rules">
+          <div class="rule"><span class="mark do" aria-label="Do">✓</span><span><b>Navy on light grey</b> as the default for every page.</span></div>
+          <div class="rule"><span class="mark do" aria-label="Do">✓</span><span><b>One bronze word</b> per headline, on the idea that matters most.</span></div>
+          <div class="rule"><span class="mark do" aria-label="Do">✓</span><span><b>Real numbers</b>, such as "45,000 eggs/hour", instead of adjectives.</span></div>
+          <div class="rule"><span class="mark do" aria-label="Do">✓</span><span><b>Eyebrow, serif heading, short lead</b> at the start of each section.</span></div>
+        </div>
+        <div class="panel rules">
+          <div class="rule"><span class="mark dont" aria-label="Don't">✕</span><span><b>No shadows</b> on cards, and no purple or blue "tech" gradients.</span></div>
+          <div class="rule"><span class="mark dont" aria-label="Don't">✕</span><span><b>No amber text</b> and no large amber areas.</span></div>
+          <div class="rule"><span class="mark dont" aria-label="Don't">✕</span><span><b>No all-caps headlines</b> and no emoji as section markers.</span></div>
+          <div class="rule"><span class="mark dont" aria-label="Don't">✕</span><span><b>No recoloured logo.</b> Ask Marketing for the official variants.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="agents">
+    <div class="wrap">
+      <div class="block-head" style="margin:0">
+        <p class="eyebrow" style="color:var(--moba-amber)">For AI agents</p>
+        <h2>How an assistant builds this page</h2>
+        <p class="lead">This page was generated by an AI agent that followed the files in the Moba repository. Any colleague can ask Claude or Copilot for a new page and get the same look.</p>
+      </div>
+      <ol class="flow">
+        <li><b>Rules</b><code>AGENTS.md</code><p>Who Moba is, what may and may not go into the repo, how to work.</p></li>
+        <li><b>Look</b><code>DESIGN.md</code><p>Colours, type, spacing and components, taken from moba.net.</p></li>
+        <li><b>Method</b><code>moba-web-page</code><p>A skill with steps, output format, "never" rules and known gotchas.</p></li>
+        <li><b>Result</b><code>tools/…/index.html</code><p>One self-contained page, reviewed by a person through a pull request.</p></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#top"><b>MOBA</b><span>Egg Industry Solutions</span></a>
+        <p class="tagline">Building Your Sustainable Egg Future</p>
+      </div>
+      <div><h3>Foundations</h3><ul><li>Colour</li><li>Typography</li><li>Spacing</li></ul></div>
+      <div><h3>Building blocks</h3><ul><li>Buttons</li><li>Cards</li><li>Imagery</li></ul></div>
+      <div><h3>Repository</h3><ul><li>AGENTS.md</li><li>DESIGN.md</li><li>.claude/skills</li></ul></div>
+    </div>
+    <div class="legal"><span>IT &amp; Digital Transformation · Moba, Barneveld</span><span>Design system v0.1 · internal</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+const colours = [
+  ["Navy", "--moba-navy", "#002659", "Headings, body text, logo, outline buttons"],
+  ["Navy deep", "--moba-navy-deep", "#112337", "Dark text and dark details"],
+  ["Navy light", "--moba-navy-light", "#014589", "Start of the navy gradient"],
+  ["Slate", "--moba-slate", "#41586B", "Paragraph text in content"],
+  ["Grey", "--moba-grey", "#8698A2", "Meta text and the dotted grid"],
+  ["Canvas", "--moba-canvas", "#F2F3F5", "Page background", true],
+  ["Surface", "--moba-surface", "#FFFFFF", "Cards and dropdowns", true],
+  ["Border", "--moba-border", "#DEE2E6", "Hairlines and dividers", true],
+  ["Amber", "--moba-amber", "#FCAF17", "Primary buttons only"],
+  ["Bronze", "--moba-bronze-1", "#D7955E", "One highlighted headline word"],
+  ["Bronze deep", "--moba-bronze-2", "#A77449", "End of the bronze gradient"],
+  ["Error", "--moba-error", "#C02B0A", "Form errors only"]
+];
+const sw = document.getElementById("swatches");
+colours.forEach(([name, token, hex, use, light]) => {
+  const el = document.createElement("div");
+  el.className = "swatch";
+  el.innerHTML = `<div class="chip${light ? " lined" : ""}" style="background:${hex}"></div>
+    <div class="swatch-body"><span class="name">${name}</span>
+    <div class="hex"><code>${hex}</code><button class="copy" type="button" data-hex="${hex}" aria-label="Copy ${name} ${hex}">Copy</button></div>
+    <span class="use">${use}</span><span class="use"><code>${token}</code></span></div>`;
+  sw.appendChild(el);
+});
+
+const toast = document.getElementById("toast");
+let tt;
+function showToast(msg) { toast.textContent = msg; toast.hidden = false; clearTimeout(tt); tt = setTimeout(() => toast.hidden = true, 1600); }
+sw.addEventListener("click", e => {
+  const b = e.target.closest(".copy"); if (!b) return;
+  const hex = b.dataset.hex;
+  (navigator.clipboard ? navigator.clipboard.writeText(hex) : Promise.reject())
+    .then(() => showToast(`Copied ${hex}`))
+    .catch(() => { const r = document.createRange(); r.selectNodeContents(b.previousElementSibling); const s = getSelection(); s.removeAllRanges(); s.addRange(r); showToast(`Selected ${hex}, press Ctrl+C`); });
+});
+
+const spacing = [8, 12, 16, 24, 32, 40, 52, 64, 80, 100];
+const sp = document.getElementById("spacingScale");
+spacing.forEach((v, i) => {
+  sp.insertAdjacentHTML("beforeend", `<div class="sp-row"><span>--sp-${i + 1} · ${v}px</span><div class="sp-bar" style="width:${v * 4}px"></div></div>`);
+});
+
+const eggIcon = (tone) => `<svg viewBox="0 0 120 90" aria-hidden="true">
+  <rect x="8" y="58" width="104" height="14" rx="3" fill="#002659"/>
+  <rect x="16" y="72" width="8" height="12" fill="#41586B"/><rect x="96" y="72" width="8" height="12" fill="#41586B"/>
+  ${[22, 42, 62, 82, 100].map((x, i) => `<ellipse cx="${x}" cy="${46 - (i % 2) * 3}" rx="8" ry="10.5" fill="${tone}" stroke="#A77449" stroke-width="1.2"/>`).join("")}
+  <rect x="8" y="22" width="18" height="36" rx="2" fill="#014589"/>
+</svg>`;
+const products = [
+  ["Omnia PX", "Grader", "Sets a new standard for gentle handling, hygiene and output in egg grading.", "Example card", "#F3E3CF"],
+  ["Mopack EP", "Farmpacker", "Gentle egg handling with high efficiency, straight from the farm.", "Example card", "#EBD2B4"],
+  ["Proxima", "Breaker", "Higher yield and closed-loop CIP, built on the Synchro breaker foundation.", "Example card", "#F6EBDD"],
+  ["Crono1", "Loader", "The smallest Crono loader: 5 rows, up to 45,000 eggs/hour.", "45,000 eggs/h · 125 cases/h", "#EFDCC5"]
+];
+document.getElementById("products").innerHTML = products.map(([n, t, d, s, c]) => `
+  <article class="product">
+    <div class="render">${eggIcon(c)}</div>
+    <h3>${n}</h3>
+    <p>${d}</p>
+    <span class="spec">${t} · ${s}</span>
+    <a href="#components">Read more</a>
+  </article>`).join("");
+</script>

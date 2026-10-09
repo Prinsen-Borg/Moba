@@ -1,0 +1,44 @@
+/* Moba design tokens: source DESIGN.md v0.1 (extracted from moba.net, 2026-10-09)
+   Import with: <link rel="stylesheet" href="../../design-system/tokens.css">
+   or copy the :root block inline for a single-file page. */
+
+:root {
+  /* Colour */
+  --moba-navy: #002659;
+  --moba-navy-deep: #112337;
+  --moba-navy-light: #014589;
+  --moba-slate: #41586B;
+  --moba-grey: #8698A2;
+  --moba-canvas: #F2F3F5;
+  --moba-surface: #FFFFFF;
+  --moba-border: #DEE2E6;
+  --moba-amber: #FCAF17;
+  --moba-bronze-1: #D7955E;
+  --moba-bronze-2: #A77449;
+  --moba-error: #C02B0A;
+
+  /* Gradients */
+  --gradient-navy: linear-gradient(90deg, #014589, #002659);
+  --gradient-steel: linear-gradient(125deg, #A4B4BC -10%, #EFF0F3 58%);
+  --gradient-bronze: linear-gradient(#D7955E, #A77449);
+
+  /* Type */
+  --font-heading: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Ubuntu", "Segoe UI", system-ui, sans-serif;
+  --fs-h1: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
+  --fs-h2: clamp(1.56rem, 1.3rem + 1vw, 2.25rem);
+  --fs-h3: 1rem;
+  --fs-body: 1.125rem;
+  --fs-small: 0.875rem;
+
+  /* Spacing (px scale from moba.net) */
+  --sp-1: 8px;  --sp-2: 12px; --sp-3: 16px; --sp-4: 24px; --sp-5: 32px;
+  --sp-6: 40px; --sp-7: 52px; --sp-8: 64px; --sp-9: 80px; --sp-10: 100px;
+
+  /* Shape */
+  --radius-card: 10px;
+  --radius-pill: 50px;
+  --radius-hero: 75px 0 0 0;
+
+  --max-width: 1500px;
+}
