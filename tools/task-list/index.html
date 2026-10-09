@@ -1,0 +1,231 @@
+<title>Moba Task List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500&family=Ubuntu:wght@400;500;700&display=swap">
+<style>
+/* Layout: one calm working column — header, add bar, filters, tasks grouped by when they are due. Light-only per DESIGN.md §9 */
+:root {
+  color-scheme: light;
+  --moba-navy: #002659;
+  --moba-navy-light: #014589;
+  --moba-slate: #41586B;
+  --moba-grey: #8698A2;
+  --moba-canvas: #F2F3F5;
+  --moba-surface: #FFFFFF;
+  --moba-border: #DEE2E6;
+  --moba-amber: #FCAF17;
+  --moba-bronze-1: #D7955E;
+  --moba-bronze-2: #A77449;
+  --moba-error: #C02B0A;
+  --on-navy: #FFFFFF;
+  --on-navy-muted: #C9D3DE;
+  --gradient-navy: linear-gradient(90deg, var(--moba-navy-light), var(--moba-navy));
+  --font-heading: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Ubuntu", "Segoe UI", system-ui, sans-serif;
+  --radius-card: 10px;
+  --radius-pill: 50px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--moba-canvas); color: var(--moba-navy); font-family: var(--font-body); font-size: 1rem; line-height: 1.5; }
+.wrap { max-width: 860px; margin-inline: auto; padding-inline: max(16px, 4vw); }
+h1, h2 { font-family: var(--font-heading); font-weight: 500; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem); line-height: 1.2; }
+h2 { font-size: 1.25rem; line-height: 1.3; }
+.hl { color: var(--moba-bronze-1); background: linear-gradient(var(--moba-bronze-1), var(--moba-bronze-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+:focus-visible { outline: 3px solid var(--moba-navy); outline-offset: 2px; border-radius: 4px; }
+
+.topbar { background: var(--gradient-navy); color: var(--on-navy-muted); font-size: .8rem; }
+.topbar .wrap { display: flex; justify-content: space-between; gap: 12px; padding-block: 10px; flex-wrap: wrap; }
+.topbar b { color: var(--on-navy); font-weight: 500; }
+
+header.wrap { padding-block: 40px 24px; display: grid; gap: 10px; }
+.eyebrow { font-weight: 500; }
+.lead { color: var(--moba-slate); max-width: 62ch; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; font-size: .85rem; }
+.stat { background: var(--moba-surface); border: 1px solid var(--moba-border); border-radius: var(--radius-pill); padding: 4px 12px; font-variant-numeric: tabular-nums; }
+.stat b { font-weight: 700; }
+.stat.warn b { color: var(--moba-error); }
+
+.add { background: var(--moba-surface); border-radius: var(--radius-card); border: 1px solid var(--moba-border); padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr) 160px auto; gap: 10px; align-items: end; }
+.add label { display: grid; gap: 4px; font-size: .8rem; color: var(--moba-slate); font-weight: 500; min-width: 0; }
+.add input { font: inherit; font-size: 1rem; color: var(--moba-navy); border: 1px solid var(--moba-border); border-radius: 8px; padding: 10px 12px; background: var(--moba-surface); width: 100%; min-width: 0; }
+.add input:focus { border-color: var(--moba-navy); outline: none; box-shadow: 0 0 0 3px rgba(0,38,89,.12); }
+.btn { display: inline-flex; align-items: center; gap: 10px; font: 400 1rem/1 var(--font-body); padding: 10px 10px 10px 18px; border-radius: var(--radius-pill); border: 1px solid transparent; cursor: pointer; background: var(--moba-amber); color: var(--moba-navy); white-space: nowrap; }
+.btn .arrow { width: 22px; height: 22px; border-radius: 50%; background: var(--moba-navy); display: grid; place-items: center; }
+.btn .arrow svg { width: 10px; height: 10px; fill: none; stroke: var(--moba-surface); stroke-width: 2.4; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-block: 24px 8px; }
+.chip { font: 500 .85rem var(--font-body); color: var(--moba-navy); background: transparent; border: 1px solid var(--moba-navy); border-radius: var(--radius-pill); padding: 6px 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--moba-navy); color: var(--on-navy); }
+
+main.wrap { padding-bottom: 64px; }
+.group { margin-top: 28px; }
+.group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.group-head span { font-size: .85rem; color: var(--moba-slate); font-variant-numeric: tabular-nums; }
+.list { list-style: none; margin: 0; padding: 0; background: var(--moba-surface); border-radius: var(--radius-card); border: 1px solid var(--moba-border); }
+.task { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--moba-border); align-items: start; }
+.task:last-child { border-bottom: 0; }
+.task > * { min-width: 0; }
+.check { appearance: none; width: 22px; height: 22px; margin: 1px 0 0; border: 2px solid var(--moba-navy); border-radius: 50%; cursor: pointer; display: grid; place-items: center; background: var(--moba-surface); }
+.check:checked { background: var(--moba-navy); }
+.check:checked::after { content: ""; width: 9px; height: 5px; border: 2px solid var(--on-navy); border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
+.title { font-size: 1rem; overflow-wrap: anywhere; }
+.done .title { color: var(--moba-grey); text-decoration: line-through; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: .8rem; color: var(--moba-slate); margin-top: 4px; }
+.meta .due { font-weight: 500; color: var(--moba-navy); font-variant-numeric: tabular-nums; }
+.meta .due.late { color: var(--moba-error); }
+.meta .src::before { content: ""; display: inline-block; width: 8px; height: 10px; margin-right: 6px; border: 1.5px solid var(--moba-bronze-2); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; vertical-align: -1px; }
+.tag { font-size: .72rem; font-weight: 500; letter-spacing: .03em; text-transform: uppercase; color: var(--moba-bronze-2); }
+.del { background: none; border: 0; color: var(--moba-grey); cursor: pointer; font: inherit; font-size: .8rem; padding: 2px 6px; border-radius: 6px; }
+.del:hover { color: var(--moba-error); }
+.empty { background: var(--moba-surface); border: 1px dashed var(--moba-grey); border-radius: var(--radius-card); padding: 28px; text-align: center; color: var(--moba-slate); }
+.empty b { color: var(--moba-navy); display: block; font-family: var(--font-heading); font-weight: 500; font-size: 1.15rem; margin-bottom: 4px; }
+.notice { margin-top: 12px; font-size: .85rem; color: var(--moba-slate); }
+.notice.err { color: var(--moba-error); }
+
+@media (max-width: 600px) {
+  .add { grid-template-columns: 1fr; }
+  .btn { justify-self: start; }
+}
+</style>
+
+<div class="topbar"><div class="wrap"><span><b>MOBA</b> · IT &amp; Digital Transformation</span><span>Tasks are added here by you and by Claude</span></div></div>
+
+<header class="wrap">
+  <p class="eyebrow">Task list</p>
+  <h1>What needs <span class="hl">doing</span> next</h1>
+  <p class="lead">Actions from meetings, voice memos and mail, collected by Claude with the <code>meeting-to-actions</code> skill. Tick a task when it is done.</p>
+  <div class="stats" id="stats" aria-live="polite"></div>
+</header>
+
+<main class="wrap">
+  <form class="add" id="addForm" autocomplete="off">
+    <label for="newTitle">New task<input id="newTitle" name="title" placeholder="e.g. Call the infrastructure lead about storage" required maxlength="200"></label>
+    <label for="newDue">Due date<input id="newDue" name="due" type="date"></label>
+    <button class="btn" type="submit" id="addBtn">Add task<span class="arrow" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M3 1.5 6.5 5 3 8.5"/></svg></span></button>
+  </form>
+  <p class="notice" id="notice" role="status"></p>
+
+  <div class="filters" role="group" aria-label="Show">
+    <button class="chip" type="button" data-f="open" aria-pressed="true">Open</button>
+    <button class="chip" type="button" data-f="done" aria-pressed="false">Done</button>
+    <button class="chip" type="button" data-f="all" aria-pressed="false">All</button>
+  </div>
+
+  <div id="groups">
+    <div class="empty"><b>Loading your tasks…</b>Tasks appear here as soon as the list connects.</div>
+  </div>
+</main>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const groupsEl = $("#groups"), statsEl = $("#stats"), notice = $("#notice");
+let tasks = [], filter = "open", db = null, col = null;
+
+try { const f = localStorage.getItem("moba-task-filter"); if (f) filter = f; } catch (e) {}
+document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.f === filter)));
+
+const today = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+const parse = (s) => { if (!s) return null; const [y,m,d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+const fmt = (s) => parse(s).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+
+function bucket(t) {
+  if (t.status === "done") return "Done";
+  const d = parse(t.due); if (!d) return "No date yet";
+  const diff = Math.round((d - today()) / 864e5);
+  if (diff < 0) return "Overdue";
+  if (diff <= 7) return "This week";
+  if (diff <= 31) return "This month";
+  return "Later";
+}
+const ORDER = ["Overdue", "This week", "This month", "Later", "No date yet", "Done"];
+
+function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+function render() {
+  const open = tasks.filter(t => t.status !== "done");
+  const late = open.filter(t => bucket(t) === "Overdue").length;
+  const week = open.filter(t => bucket(t) === "This week").length;
+  statsEl.innerHTML = `<span class="stat"><b>${open.length}</b> open</span><span class="stat"><b>${week}</b> due this week</span>${late ? `<span class="stat warn"><b>${late}</b> overdue</span>` : ""}<span class="stat"><b>${tasks.length - open.length}</b> done</span>`;
+
+  const shown = tasks.filter(t => filter === "all" || (filter === "done" ? t.status === "done" : t.status !== "done"));
+  if (!shown.length) {
+    groupsEl.innerHTML = tasks.length
+      ? `<div class="empty"><b>Nothing here</b>Switch the filter to see other tasks.</div>`
+      : `<div class="empty"><b>No tasks yet</b>Add one above, or ask Claude: “Get the to-dos from my meetings and add them to my task list.”</div>`;
+    return;
+  }
+  const groups = {};
+  shown.forEach(t => (groups[bucket(t)] ||= []).push(t));
+  groupsEl.innerHTML = ORDER.filter(g => groups[g]).map(g => {
+    const items = groups[g].sort((a, b) => (a.due || "9999").localeCompare(b.due || "9999") || String(a.createdAt).localeCompare(String(b.createdAt)));
+    return `<section class="group" aria-label="${g}"><div class="group-head"><h2>${g}</h2><span>${items.length}</span></div><ul class="list">${items.map(row).join("")}</ul></section>`;
+  }).join("");
+}
+
+function row(t) {
+  const done = t.status === "done";
+  const late = !done && bucket(t) === "Overdue";
+  const due = t.due ? `<span class="due${late ? " late" : ""}">${fmt(t.due)}</span>` : (t.dueNote ? `<span class="due">${esc(t.dueNote)}</span>` : "");
+  const note = t.due && t.dueNote ? `<span>${esc(t.dueNote)}</span>` : "";
+  return `<li class="task${done ? " done" : ""}" data-id="${esc(t.id)}">
+    <input class="check" type="checkbox" id="c-${esc(t.id)}" ${done ? "checked" : ""} aria-label="Mark “${esc(t.title)}” as ${done ? "open" : "done"}">
+    <div><label class="title" for="c-${esc(t.id)}">${esc(t.title)}</label>
+      <div class="meta">${due}${note}${t.owner ? `<span>${esc(t.owner)}</span>` : ""}${t.source ? `<span class="src">${esc(t.source)}</span>` : ""}${t.addedBy === "claude" ? `<span class="tag">Added by Claude</span>` : ""}</div></div>
+    <button class="del" type="button" aria-label="Delete “${esc(t.title)}”">Delete</button></li>`;
+}
+
+document.querySelector(".filters").addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if (!c) return;
+  filter = c.dataset.f;
+  document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", String(x === c)));
+  try { localStorage.setItem("moba-task-filter", filter); } catch (err) {}
+  render();
+});
+
+function say(msg, err) { notice.textContent = msg; notice.className = "notice" + (err ? " err" : ""); }
+
+groupsEl.addEventListener("change", async e => {
+  const box = e.target.closest(".check"); if (!box || !col) return;
+  const id = box.closest(".task").dataset.id;
+  try { await col.doc(id).update({ status: box.checked ? "done" : "open", doneAt: box.checked ? new Date().toISOString() : null }); }
+  catch (err) { box.checked = !box.checked; say("That change was not saved. You may have view-only access to this list.", true); }
+});
+
+let pendingDelete = null;
+groupsEl.addEventListener("click", async e => {
+  const b = e.target.closest(".del"); if (!b || !col) return;
+  const id = b.closest(".task").dataset.id;
+  if (pendingDelete !== id) { pendingDelete = id; b.textContent = "Confirm delete"; setTimeout(() => { if (pendingDelete === id) { pendingDelete = null; render(); } }, 4000); return; }
+  pendingDelete = null;
+  try { await col.doc(id).delete(); say("Task deleted."); } catch (err) { say("The task could not be deleted.", true); }
+});
+
+$("#addForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!col) { say("The list is not connected yet. Try again in a moment.", true); return; }
+  const title = $("#newTitle").value.trim(); if (!title) return;
+  const due = $("#newDue").value || null;
+  $("#addBtn").disabled = true;
+  try {
+    await col.add({ title, due, status: "open", owner: "", source: "Added by hand", addedBy: "you", createdAt: new Date().toISOString() });
+    $("#newTitle").value = ""; $("#newDue").value = ""; say("Task added.");
+  } catch (err) { say("The task could not be saved. You may have view-only access to this list.", true); }
+  $("#addBtn").disabled = false;
+});
+
+(async () => {
+  db = await window.claude?.use?.("db");
+  if (!db) {
+    groupsEl.innerHTML = `<div class="empty"><b>The task list can’t load here</b>Open it from Claude while signed in to see and edit your tasks.</div>`;
+    $("#addBtn").disabled = true;
+    return;
+  }
+  col = db.collection("tasks");
+  col.onSnapshot(snap => {
+    tasks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    render();
+  }, err => { groupsEl.innerHTML = `<div class="empty"><b>The connection to your tasks stopped</b>Reload the page to reconnect.</div>`; });
+})();
+</script>

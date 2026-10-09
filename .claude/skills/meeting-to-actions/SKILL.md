@@ -15,7 +15,8 @@ A short, checked list of decisions and actions from a meeting, with an owner and
    - **Actions**: what, who and by when. Mark a missing owner or date as "to confirm".
    - **Open questions**: anything unresolved.
 4. Separate facts from interpretation: use "(assumed)" for anything not said explicitly.
-5. Offer one next step: a follow-up mail draft, or adding the actions to the user's task list.
+5. Show the list to the user first. Then offer one next step: a follow-up mail draft, or adding the actions to the user's task list.
+6. **Adding to the task list:** if the user has a personal task list (see `tools/task-list/README.md`), write the user's *own* actions there in the documented data format, with `addedBy: "claude"`. Check for existing tasks first and update instead of duplicating. Actions owned by others go in the follow-up mail, not in the user's list. If the user has no list yet, offer to set one up.
 
 ## Output
 ```
